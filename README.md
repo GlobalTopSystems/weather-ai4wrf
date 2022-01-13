@@ -1,4 +1,4 @@
-# WAIA
+# WAIAR
 <!-- wp:paragraph -->
 <p>Weather HyperConvergent Infrastructure / AI Appliance</p>
 <!-- /wp:paragraph -->
