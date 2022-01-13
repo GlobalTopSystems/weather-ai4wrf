@@ -1,6 +1,6 @@
 # WAIAR
 <!-- wp:paragraph -->
-<p>Weather HyperConvergent Infrastructure / AI Appliance</p>
+<p>Weather HyperConvergent Infrastructure & AI/AR Appliance</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:paragraph {"align":"justify"} -->
