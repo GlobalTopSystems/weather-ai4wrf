@@ -1,4 +1,4 @@
-# WeatherAI
+# Weather-AIA
 <!-- wp:paragraph -->
 <p>Weather AI HyperConvergent Infrastructure & Appliance</p>
 <!-- /wp:paragraph -->
