@@ -6,3 +6,11 @@
 <!-- wp:paragraph {"align":"justify"} -->
 <p class="has-text-align-justify">The first Weather-AI Appliance (Hyper-Convergent Infrastructure Appliance) using latest CentOS distro. WeatherAI Appliance is available as WSL2 private distribution under Windows 11 Pro. For additional information see: https://globaltopsystems.wordpress.com/about/waia/waia-news/ . </p>
 <!-- /wp:paragraph -->
+
+git clone https://github.com/GlobalTopSystems/Weather-AI
+
+cd weather-ai
+
+docker compose -f weather-ai.yaml up
+
+docker-compose -f weather-ai.yaml ps
