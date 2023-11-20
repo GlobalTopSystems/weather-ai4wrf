@@ -1,0 +1,5 @@
+services:
+  database:
+    image: postgres:12
+    environment:
+      POSTGRES_PASSWORD: password
