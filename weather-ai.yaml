@@ -5,4 +5,4 @@ services:
   web:
     image: nginx:latest
     depends_on:
-      - database
+    #  - database
