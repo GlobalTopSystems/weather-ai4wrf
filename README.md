@@ -3,10 +3,10 @@
 ### Weather-AI software (Version 2.0.2.5) by Global Top Systems (GTS-VB):
 "It is important to note that any usage or publication that incorporates or references this software, must include a proper citation to acknowledge the work of the author. This is not only a matter of respect and academic integrity, but also a requirement set by the author. Please ensure to adhere to this guideline when using this software.
 
-### Weather-AI: a HyperConvergent Infrastructure Appliance (HCIApp).
+Weather-AI software (Version 2.0.2.5)
+HyperConvergent Infrastructure Appliance (HCIApp)
 Modular and cross-platform tool for installing and configuring OpenSource Meteorological Software (Computer software).
 
----
 ### Getting Started
 Clone the repository
 
@@ -52,99 +52,90 @@ git clone https://github.com/GlobalTopSystems/weather-ai
 ---
 ### Software Packages
 
-- WRF
-    - WRF v4.6.0
-    - WPS v4.6.0
-    - WRF PLUS v4.6.0
-    - WRFDA 4DVAR v4.6.0    
-- WRF-CHEM
-    - WRF Chem w/KPP 4.5
-    - WPS v4.6.0
-    - WRFDA Chem 3DVAR
-- WRF-Hydro Standalone
-    - WRF-Hydro v5.2
-- WRF-Hydro Coupled
-    - WRF-Hydro v5.2
-    - WRF v4.6.0
-    - WPS v4.6.0
-- WRF-CMAQ
-    - WRF v4.6.0
-    - CMAW v5.4
-    - WPS v4.6.0
-- WRF-SFIRE
-    - WRF-SFIRE v2
-    - WPS v4.2
-
----
+### - WRF
+       - WRF v4.6.0
+       - WPS v4.6.0
+       - WRF PLUS v4.6.0
+       - WRFDA 4DVAR v4.6.0    
+### - WRF-CHEM
+       - WRF Chem w/KPP 4.5
+       - WPS v4.6.0
+       - WRFDA Chem 3DVAR
+### - WRF-Hydro Standalone
+       - WRF-Hydro v5.2
+### - WRF-Hydro Coupled
+       - WRF-Hydro v5.2
+       - WRF v4.6.0
+       - WPS v4.6.0
+### - WRF-CMAQ
+       - WRF v4.6.0
+       - CMAW v5.4
+       - WPS v4.6.0
+### - WRF-SFIRE
+       - WRF-SFIRE v2
+       - WPS v4.2
 ### Pre/Post Processing Packages Installed
-- WRF
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-    - ARWPost v3
-    - WRF-Python (Conda installed)
-    - OpenGrADS
-    - GrADS
-    - NCAR Command Langauge (Conda installed)
-    - Climate Data Operators (Conda installed)
-      
-- WRF-CHEM
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-    - ARWPost v3
-    - WRF-Python (Conda installed)
-    - OpenGrADS
-    - GrADS
-    - NCAR Command Langauge (Conda installed)
-    - Climate Data Operators (Conda installed)
-    - Prep-Chem-SRC v1.5 (GNU only)
-    - WRF CHEM Tools
-        - Mozbc
-        - Megan Bio Emiss
-        - Megan Bio Data
-        - Wes Coldens
-        - ANTHRO EMIS
-        - EDGAR HTAP
-        - EPA ANTHO EMIS
-        - UBC
-        - Aircraft
-        - FINN
-
-- WRF-Hydro Standalone
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-      
-- WRF-Hydo Coupled
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-    - ARWPost v3
-    - WRF-Python (Conda installed)
-    - OpenGrADS
-    - GrADS
-    - NCAR Command Langauge (Conda installed)
-    - Climate Data Operators (Conda installed)
-    - WRF-GIS-Preprocessor (Conda installed)
-      
-- WRF-SFIRE
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-    - ARWPost v3
-    - WRF-Python (Conda installed)
-    - OpenGrADS
-    - GrADS
-    - NCAR Command Langauge (Conda installed)
-    - Climate Data Operators (Conda installed)
-  
-- WRF-CMAQ
-    - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
-    - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
-    - ARWPost v3
-    - WRF-Python (Conda installed)
-    - OpenGrADS
-    - GrADS
-    - NCAR Command Langauge (Conda installed)
-    - Climate Data Operators (Conda installed)
-
----
+### - WRF
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+       - ARWPost v3
+       - WRF-Python (Conda installed)
+       - OpenGrADS
+       - GrADS
+       - NCAR Command Langauge (Conda installed)
+       - Climate Data Operators (Conda installed) 
+### - WRF-CHEM
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+       - ARWPost v3
+       - WRF-Python (Conda installed)
+       - OpenGrADS
+       - GrADS
+       - NCAR Command Langauge (Conda installed)
+       - Climate Data Operators (Conda installed)
+       - Prep-Chem-SRC v1.5 (GNU only)
+### - WRF CHEM Tools
+       - Mozbc
+       - Megan Bio Emiss
+       - Megan Bio Data
+       - Wes Coldens
+       - ANTHRO EMIS
+       - EDGAR HTAP
+       - EPA ANTHO EMIS
+       - UBC
+       - Aircraft
+       - FINN
+### - WRF-Hydro Standalone
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+### - WRF-Hydo Coupled
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+       - ARWPost v3
+       - WRF-Python (Conda installed)
+       - OpenGrADS
+       - GrADS
+       - NCAR Command Langauge (Conda installed)
+       - Climate Data Operators (Conda installed)
+       - WRF-GIS-Preprocessor (Conda installed)
+### - WRF-SFIRE
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+       - ARWPost v3
+       - WRF-Python (Conda installed)
+       - OpenGrADS
+       - GrADS
+       - NCAR Command Langauge (Conda installed)
+       - Climate Data Operators (Conda installed)
+### - WRF-CMAQ
+       - Development Testbed Center (DTC) Model Evaluation Tools (MET) v12.0.2
+       - Development Testbed Center (DTC) Enhanced Model Evaluation Tools (METplus) v6.0.0
+       - ARWPost v3
+       - WRF-Python (Conda installed)
+       - OpenGrADS
+       - GrADS
+       - NCAR Command Langauge (Conda installed)
+       - Climate Data Operators (Conda installed)
 ### MacOS Installation
 - Make sure to download and Homebrew before moving to installation.
 > cd $HOME
@@ -190,16 +181,22 @@ git clone https://github.com/GlobalTopSystems/weather-ai
 > ./weather-ai.sh 2>&1 | tee weather-ai.log
 
 > Script will check for System Architecture Type and Storage Space requirements.
+---
+Once running the script users will be provided with options to select how the Weather-AI will compile and install the various packages.
 
-> Once running the script users will be provided with options to select how the Weather-AI will compile and install the various packages.
-    - First option, Which compiler users want to use Intel or GNU compilers.
-    - Second option, Which graphic display package should be installed.  GrADS or OpenGrADS
-    - Third option, Auto Configuration.  This allows users to have a one-click install
-    - Fourth option, Secondary WPS geography file download choice.
-      - Author of script recommends selecting "YES" if user is unsure.
-    - Fifth option, Optional WPS geography file download choice.
-      - Author of script recommends selecting "YES" if user is unsure.
-    - Last option, Pick which WRF software user wants to install
+> First option, Which compiler users want to use Intel or GNU compilers.
+
+> Second option, Which graphic display package should be installed.  GrADS or OpenGrADS
+
+> Third option, Auto Configuration.  This allows users to have a one-click install
+
+> Fourth option, Secondary WPS geography file download choice
+   > Author of script recommends selecting "YES" if user is unsure.
+
+> Fifth option, Optional WPS geography file download choice.
+   > Author of script recommends selecting "YES" if user is unsure.
+
+> Last option, Pick which WRF software user wants to install
 
 ### Run the Services
 
