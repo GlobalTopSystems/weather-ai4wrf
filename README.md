@@ -16,20 +16,24 @@ git clone https://github.com/GlobalTopSystems/weather-ai
 ### System Requirements
 - 64-bit system
     - Darwin (MacOS)
-    - Linux Distro (Ubuntu, Mint, CentOS, etc.)
-    - Windows Subsystem for Linux (CentOS Stream distro, etc.)
-    - RHEL Systems (AlmaLinux, Fedora, RedHat, CentOS) currently being tested.
-- 150 Gigabyte (GB) of free storage space
+    - Various Linux Distros (Ubuntu, Mint, CentOS, etc.)
+    - WSL (CentOS 7,8 and 8,9 and 10 Streams , etc.) currently being tested
+    - RHEL Systems (AlmaLinux, Fedora, RedHat, CentOS, etc.)
+- <20 Gigabyte (GB) of free storage space
 
 ---
-### CentOS
-Installation
-- (Make sure to download folder into your Home Directory):
+### CentOS 7, 8 Stream 
+Installation (Make sure to download folder into your Home Directory):
 > cd $HOME
+
 > sudo (yum or dnf) install git -y
+
 > git clone https://github.com/GlobalTopSystems/weather-ai.git
+
 > cd $HOME/weather-ai
+
 > chmod 775 *.sh
+
 > ./weather-ai.sh 2>&1 | tee weather-ai.log
 ---
 ### Libraries Installed (Latest libraries as of 11/01/2023)
