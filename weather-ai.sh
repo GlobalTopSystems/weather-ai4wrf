@@ -27560,10 +27560,9 @@ if [ "$WRFCHEM_TOOLS" = "1" ]; then
 
 		echo $PASSWD | sudo -S sudo apt install git
 		cd $HOME
-		git clone https://github.com/HathewayWill/WRFCHEM-TOOLS-MOSIT.git
-		cd WRFCHEM-TOOLS-MOSIT
+		cd weather-ai
 		chmod 775 *.sh
-		./WRFCHEM_TOOLS_MOSIT.sh $PASSWD $Ubuntu_64bit_GNU
+		./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_GNU
 		cd $HOME
 	fi
 
@@ -27571,10 +27570,9 @@ if [ "$WRFCHEM_TOOLS" = "1" ]; then
 
 		echo $PASSWD | sudo -S sudo apt install git
 		cd $HOME
-		git clone https://github.com/HathewayWill/WRFCHEM-TOOLS-MOSIT.git
-		cd WRFCHEM-TOOLS-MOSIT
+		cd weather-ai
 		chmod 775 *.sh
-		./WRFCHEM_TOOLS_MOSIT.sh $PASSWD $Ubuntu_64bit_Intel
+		./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_Intel
 		cd $HOME
 	fi
 
@@ -27582,10 +27580,9 @@ if [ "$WRFCHEM_TOOLS" = "1" ]; then
 
 		brew install git
 		cd $HOME
-		git clone https://github.com/HathewayWill/WRFCHEM-TOOLS-MOSIT.git
-		cd WRFCHEM-TOOLS-MOSIT
+		cd weather-ai
 		chmod 775 *.sh
-		./WRFCHEM_TOOLS_MOSIT.sh $PASSWD $macos_64bit_GNU
+		./weather-ai-tools.sh $PASSWD $macos_64bit_GNU
 		cd $HOME
 	fi
 
@@ -27593,10 +27590,9 @@ if [ "$WRFCHEM_TOOLS" = "1" ]; then
 
 		echo $PASSWD | sudo -S sudo dnf install git
 		cd $HOME
-		git clone https://github.com/HathewayWill/WRFCHEM-TOOLS-MOSIT.git
-		cd WRFCHEM-TOOLS-MOSIT
+		cd weather-ai
 		chmod 775 *.sh
-		./WRFCHEM_TOOLS_MOSIT.sh $PASSWD $RHL_64bit_GNU
+		./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
 		cd $HOME
 	fi
 
@@ -27604,10 +27600,9 @@ if [ "$WRFCHEM_TOOLS" = "1" ]; then
 
 		echo $PASSWD | sudo -S sudo dnf install git
 		cd $HOME
-		git clone https://github.com/HathewayWill/WRFCHEM-TOOLS-MOSIT.git
-		cd WRFCHEM-TOOLS-MOSIT
+		cd weather-ai
 		chmod 775 *.sh
-		./WRFCHEM_TOOLS_MOSIT.sh $PASSWD $RHL_64bit_GNU
+		./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
 		cd $HOME
 	fi
 
