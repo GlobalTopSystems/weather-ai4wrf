@@ -1,6 +1,6 @@
 ### Citation:
 ---
-### Weather-AI software (Version 2.0.2.5) by Global Top Systems (GTS-VB):
+### Weather-AI software (Version 2.0.2.5) by Global Top Systems (GTS):
 "It is important to note that any usage or publication that incorporates or references this software, must include a proper citation to acknowledge the work of the author. This is not only a matter of respect and academic integrity, but also a requirement set by the author. Please ensure to adhere to this guideline when using this software.
 
 Weather-AI software (Version 2.0.2.5)
