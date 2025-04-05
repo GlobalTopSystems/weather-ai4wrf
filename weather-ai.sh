@@ -15,10 +15,10 @@ START=$(date +"%s")
 ############################### Version Numbers ##########################
 # For Ease of updating
 ##########################################################################
-#export METPLUS_Version=5.1.0
-#export met_Version_number=11.1.1
-#export met_VERSION_number=11.1
-#export METPLUS_DATA=5.1
+export METPLUS_Version=5.1.0
+export met_Version_number=11.1.1
+export met_VERSION_number=11.1
+export METPLUS_DATA=5.1
 export Zlib_Version=1.3.1
 export Mpich_Version=4.2.3
 export Libpng_Version=1.6.39
@@ -28,8 +28,8 @@ export HDF5_Sub_Version=3
 export Pnetcdf_Version=1.13.0
 export Netcdf_C_Version=4.9.2
 export Netcdf_Fortran_Version=4.6.1
-#export WRF_VERSION=4.6.1
-#export WPS_VERSION=4.6.0
+export WRF_VERSION=4.6.1
+export WPS_VERSION=4.6.0
 ############################### Citation Requirement  ####################
 echo " "
 echo " The Global Top Systems Company at GitHub site for Weather-AI software (Version 2.0.2.5) by B. Vasiliu (2025)"
@@ -4265,7 +4265,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -4291,7 +4291,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ]; then
 	#creation, spatial analysis, and data management.
 	#############################################################################
 
-	conda env create -f $HOME/WRF-MOSIT/qgis.3.28.8.yml
+	conda env create -f $HOME/weather-ai/qgis.3.28.8.yml
 
 	echo " "
 
@@ -4979,7 +4979,7 @@ if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$SFIRE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -5703,7 +5703,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ] && [ "$MAC_CHIP" = "I
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -5729,7 +5729,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ] && [ "$MAC_CHIP" = "I
 	#creation, spatial analysis, and data management.
 	#############################################################################
 
-	conda env create -f $HOME/WRF-MOSIT/qgis.3.28.8.yml
+	conda env create -f $HOME/weather-ai/qgis.3.28.8.yml
 
 	echo " "
 
@@ -6470,7 +6470,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ] && [ "$MAC_CHIP" = "A
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -7305,7 +7305,7 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 
@@ -7333,7 +7333,7 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$SFIRE_PICK" = "1" ]; then
 	#creation, spatial analysis, and data management.
 	#############################################################################
 
-	conda env create -f $HOME/WRF-MOSIT/qgis.3.28.8.yml
+	conda env create -f $HOME/weather-ai/qgis.3.28.8.yml
 
 	echo " "
 
@@ -8156,7 +8156,7 @@ if [ "$RHL_64bit_GNU" = "2" ] && [ "$SFIRE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 
@@ -8184,7 +8184,7 @@ if [ "$RHL_64bit_GNU" = "2" ] && [ "$SFIRE_PICK" = "1" ]; then
 	#creation, spatial analysis, and data management.
 	#############################################################################
 
-	conda env create -f $HOME/WRF-MOSIT/qgis.3.28.8.yml
+	conda env create -f $HOME/weather-ai/qgis.3.28.8.yml
 
 	echo " "
 
@@ -8902,7 +8902,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -8923,7 +8923,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ]; then
 	echo " "
 
 	################ NEEDS TO BE IN Master folder #######################
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -9512,10 +9512,10 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ] && [ "$
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 	echo " "
 
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -10148,10 +10148,10 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ] && [ "$
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 	echo " "
 
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -10652,11 +10652,11 @@ if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ]; the
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 	echo " "
 
 	################ NEEDS TO BE IN Master folder #######################
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -11182,10 +11182,10 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 	echo " "
 	################ NEEDS TO BE IN Master folder #######################
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -11719,10 +11719,10 @@ if [ "$RHL_64bit_GNU" = "2" ] && [ "$WRFHYDRO_STANDALONE_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 	echo " "
 	################ NEEDS TO BE IN Master folder #######################
-	cp $HOME/WRF-MOSIT/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
+	cp $HOME/weather-ai/SurfaceRunoff.py "${WRF_FOLDER}"/domain/NWM
 
 	cd "${WRF_FOLDER}"/domain/NWM
 
@@ -12374,7 +12374,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 # 	######################### Climate Data Operators ############
 # 	######################### CDO compiled via Conda ###########
@@ -13183,7 +13183,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 # 	######################### Climate Data Operators ############
 # 	######################### CDO compiled via Conda ###########
@@ -14014,7 +14014,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 # 	######################### Climate Data Operators ############
 # 	######################### CDO compiled via Conda ###########
@@ -14838,7 +14838,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 # 	######################### Climate Data Operators ############
 # 	######################### CDO compiled via Conda ###########
@@ -15767,7 +15767,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 # 	echo " "
 
@@ -16648,7 +16648,7 @@ fi
 # 	########### This is the preferred method by NCAR      ##################
 # 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 # 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-# 	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+# 	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 # 	echo " "
 
 # 	########################## WRF Hydro GIS PreProcessor ##############################
@@ -17584,7 +17584,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 
@@ -18390,7 +18390,7 @@ if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -19201,7 +19201,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ] && [ "$MAC_CHIP" = 
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -20014,7 +20014,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ] && [ "$MAC_CHIP" = 
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -20938,7 +20938,7 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 
@@ -21850,7 +21850,7 @@ if [ "$RHL_64bit_GNU" = "2" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	############################WRFDA 3DVAR###############################
 	## WRFDA v${WPS_VERSION} 3DVAR
@@ -22787,7 +22787,7 @@ if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRF_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -23618,7 +23618,7 @@ if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$WRF_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -24468,7 +24468,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRF_PICK" = "1" ] && [ "$MAC_CHIP" = "Int
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -25316,7 +25316,7 @@ if [ "$macos_64bit_GNU" = "1" ] && [ "$WRF_PICK" = "1" ] && [ "$MAC_CHIP" = "ARM
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	######################### Climate Data Operators ############
 	######################### CDO compiled via Conda ###########
@@ -26279,7 +26279,7 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRF_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 	############################ WRF #################################
@@ -27238,7 +27238,7 @@ if [ "$RHL_64bit_GNU" = "2" ] && [ "$WRF_PICK" = "1" ]; then
 	########### This is the preferred method by NCAR      ##################
 	##### https://wrf-python.readthedocs.io/en/latest/installation.html  ##################
 	source $Miniconda_Install_DIR/etc/profile.d/conda.sh
-	conda env create -f $HOME/WRF-MOSIT/wrf-python-stable.yml
+	conda env create -f $HOME/weather-ai/wrf-python-stable.yml
 
 	echo " "
 
