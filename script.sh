@@ -9294,456 +9294,392 @@ export HOME=$(
 cd
 pwd
 )
-	mkdir $HOME/WRFCHEM
-	export WRF_FOLDER=$HOME/WRFCHEM
-	cd "${WRF_FOLDER}"/
-	mkdir Downloads
-	mkdir Libs
-	export DIR="${WRF_FOLDER}"/Libs
-	mkdir Libs/grib2
-	mkdir Libs/NETCDF
-	mkdir Libs/MPICH
-	mkdir -p Tests/Environment
-	mkdir -p Tests/Compatibility
-	echo " "
-	#############################Core Management####################################
-	export CPU_CORE=$(nproc) # number of available threads on system
-	export CPU_6CORE="6"
-	export CPU_QUARTER=$(($CPU_CORE / 4))                          #quarter of availble cores on system
-	export CPU_QUARTER_EVEN=$(($CPU_QUARTER - ($CPU_QUARTER % 2))) #Forces CPU cores to even number to avoid partial core export. ie 7 cores would be 3.5 cores.
-
-	if [ $CPU_CORE -le $CPU_6CORE ]; then #If statement for low core systems.  Forces computers to only use 1 core if there are 4 cores or less on the system. then
-		export CPU_QUARTER_EVEN="2"
-	else
-		export CPU_QUARTER_EVEN=$(($CPU_QUARTER - ($CPU_QUARTER % 2)))
-	fi
-
-	echo "##########################################"
-	echo "Number of Threads being used $CPU_QUARTER_EVEN"
-	echo "##########################################"
-	echo " "
-	##############################Downloading Libraries############################
-	cd Downloads
-	wget -c https://github.com/madler/zlib/releases/download/v$Zlib_Version/zlib-$Zlib_Version.tar.gz
-	wget -c https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5_Version.$HDF5_Sub_Version/hdf5-$HDF5_Version-$HDF5_Sub_Version.tar.gz
-	wget -c https://github.com/Unidata/netcdf-c/archive/refs/tags/v$Netcdf_C_Version.tar.gz
-	wget -c https://github.com/Unidata/netcdf-fortran/archive/refs/tags/v$Netcdf_Fortran_Version.tar.gz
-	wget -c https://download.sourceforge.net/libpng/libpng-$Libpng_Version.tar.gz
-	wget -c https://www.ece.uvic.ca/~frodo/jasper/software/jasper-$Jasper_Version.zip
-	wget -c https://github.com/pmodels/mpich/releases/download/v$Mpich_Version/mpich-$Mpich_Version.tar.gz
-	wget -c https://parallel-netcdf.github.io/Release/pnetcdf-$Pnetcdf_Version.tar.gz
-	wget -c https://sourceforge.net/projects/opengrads/files/grads2/2.2.1.oga.1/Linux%20%2864%20Bits%29/opengrads-2.2.1.oga.1-bundle-x86_64-pc-linux-gnu-glibc_2.17.tar.gz
-
-	echo " "
-	#############################Compilers############################
-	export CC=gcc
-	export CXX=g++
-	export FC=gfortran
-	export F77=gfortran
-	export CFLAGS="-fPIC -fPIE -O3 "
-
-	#IF statement for GNU compiler issue
-	export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
-	export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
-	export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
-
-	export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
-	export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
-	export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
-
-	export version_10="10"
-
-	if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ]; then
-		export fallow_argument=-fallow-argument-mismatch
-		export boz_argument=-fallow-invalid-boz
-	else
-		export fallow_argument=
-		export boz_argument=
-	fi
-
-	export FFLAGS="$fallow_argument -m64"
-	export FCFLAGS="$fallow_argument -m64"
-
-	echo "##########################################"
-	echo "FFLAGS = $FFLAGS"
-	echo "FCFLAGS = $FCFLAGS"
-	echo "CFLAGS = $CFLAGS"
-	echo "##########################################"
-
-	echo " "
-	#############################zlib############################
-	#Uncalling compilers due to comfigure issue with zlib$Zlib_Version
-	#With CC & CXX definied ./configure uses different compiler Flags
-
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xvzf zlib-$Zlib_Version.tar.gz
-	cd zlib-$Zlib_Version/
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-	./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	echo " "
-	##############################MPICH############################
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xvzf mpich-$Mpich_Version.tar.gz
-	cd mpich-$Mpich_Version/
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	F90= ./configure --prefix=$DIR/MPICH --with-device=ch3 FFLAGS="$fallow_argument -m64" FCFLAGS="$fallow_argument -m64" 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	export PATH=$DIR/MPICH/bin:$PATH
-	export MPIFC=$DIR/MPICH/bin/mpifort
-	export MPIF77=$DIR/MPICH/bin/mpifort
-	export MPIF90=$DIR/MPICH/bin/mpifort
-	export MPICC=$DIR/MPICH/bin/mpicc
-	export MPICXX=$DIR/MPICH/bin/mpicxx
-
-	echo " "
-	#############################libpng############################
-	cd "${WRF_FOLDER}"/Downloads
-	export LDFLAGS=-L$DIR/grib2/lib
-	export CPPFLAGS=-I$DIR/grib2/include
-	tar -xvzf libpng-$Libpng_Version.tar.gz
-	cd libpng-$Libpng_Version/
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-	echo " "
-	#############################JasPer############################
-	cd "${WRF_FOLDER}"/Downloads
-	unzip jasper-$Jasper_Version.zip
-	cd jasper-$Jasper_Version/
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	export JASPERLIB=$DIR/grib2/lib
-	export JASPERINC=$DIR/grib2/include
-
-	echo " "
-	#############################hdf5 library for netcdf4 functionality############################
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xvzf hdf5-$HDF5_Version-$HDF5_Sub_Version.tar.gz
-	cd hdf5-$HDF5_Version-$HDF5_Sub_Version
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 --with-zlib=$DIR/grib2 --enable-hl --enable-fortran --enable-parallel 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	export HDF5=$DIR/grib2
-	export PHDF5=$DIR/grib2
-	export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
-
-	echo " "
-
-	#############################Install Parallel-netCDF##############################
-	#Make file created with half of available cpu cores
-	#Hard path for MPI added
-	##################################################################################
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xzvf pnetcdf-$Pnetcdf_Version.tar.gz
-	cd pnetcdf-$Pnetcdf_Version
-	export MPIFC=$DIR/MPICH/bin/mpifort
-	export MPIF77=$DIR/MPICH/bin/mpifort
-	export MPIF90=$DIR/MPICH/bin/mpifort
-	export MPICC=$DIR/MPICH/bin/mpicc
-	export MPICXX=$DIR/MPICH/bin/mpicxx
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 --enable-shared --enable-static 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	export PNETCDF=$DIR/grib2
-
-	echo " "
-
-	##############################Install NETCDF C Library############################
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xzvf v$Netcdf_C_Version.tar.gz
-	cd netcdf-c-$Netcdf_C_Version/
-	export CPPFLAGS=-I$DIR/grib2/include
-	export LDFLAGS=-L$DIR/grib2/lib
-	export LIBS="-lhdf5_hl -lhdf5 -lz -lcurl -lgfortran -lgcc -lm -ldl -lpnetcdf"
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/NETCDF --disable-dap --enable-netcdf-4 --enable-netcdf4 --enable-shared --enable-static --enable-pnetcdf --enable-cdf5 --enable-parallel-tests 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	export PATH=$DIR/NETCDF/bin:$PATH
-	export NETCDF=$DIR/NETCDF
-	echo " "
-	##############################NetCDF fortran library############################
-	cd "${WRF_FOLDER}"/Downloads
-	tar -xvzf v$Netcdf_Fortran_Version.tar.gz
-	cd netcdf-fortran-$Netcdf_Fortran_Version/
-	export LD_LIBRARY_PATH=$DIR/NETCDF/lib:$LD_LIBRARY_PATH
-	export CPPFLAGS="-I$DIR/NETCDF/include -I$DIR/grib2/include"
-	export LDFLAGS="-L$DIR/NETCDF/lib -L$DIR/grib2/lib"
-	export LIBS="-lnetcdf -lpnetcdf -lcurl -lhdf5_hl -lhdf5 -lz -lm -ldl -lgcc -lgfortran"
-	autoreconf -i -f 2>&1 | tee autoreconf.log
-
-	CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/NETCDF --enable-netcdf-4 --enable-netcdf4 --enable-shared --enable-static --enable-parallel-tests --enable-hdf5 2>&1 | tee configure.log
-	automake -a -f 2>&1 | tee automake.log
-	make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
-	make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
-	make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
-	#make check
-
-	echo " "
-	#################################### System Environment Tests ##############
-
-	cd "${WRF_FOLDER}"/Downloads
-	wget -c https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compile_tutorial/tar_files/Fortran_C_NETCDF_MPI_tests.tar
-	wget -c https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compile_tutorial/tar_files/Fortran_C_tests.tar
-
-	tar -xvf Fortran_C_tests.tar -C "${WRF_FOLDER}"/Tests/Environment
-	tar -xvf Fortran_C_NETCDF_MPI_tests.tar -C "${WRF_FOLDER}"/Tests/Compatibility
-	export one="1"
-	echo " "
-	############## Testing Environment #####
-
-	cd "${WRF_FOLDER}"/Tests/Environment
-	cp ${NETCDF}/include/netcdf.inc .
-
-	echo " "
-	echo " "
-	echo "Environment Testing "
-	echo "Test 1"
-	$FC TEST_1_fortran_only_fixed.f
-	./a.out | tee env_test1.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test1.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Enviroment Test 1 Passed"
-	else
-		echo "Environment Compiler Test 1 Failed"
-		exit
-	fi
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-
-	echo " "
-	echo "Test 2"
-	$FC TEST_2_fortran_only_free.f90
-	./a.out | tee env_test2.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test2.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Enviroment Test 2 Passed"
-	else
-		echo "Environment Compiler Test 2 Failed"
-		exit
-	fi
-	echo " "
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-
-	echo " "
-	echo "Test 3"
-	$CC TEST_3_c_only.c
-	./a.out | tee env_test3.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test3.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Enviroment Test 3 Passed"
-	else
-		echo "Environment Compiler Test 3 Failed"
-		exit
-	fi
-	echo " "
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-
-	echo " "
-	echo "Test 4"
-	$CC -c -m64 TEST_4_fortran+c_c.c
-	$FC -c -m64 TEST_4_fortran+c_f.f90
-	$FC -m64 TEST_4_fortran+c_f.o TEST_4_fortran+c_c.o
-	./a.out | tee env_test4.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test4.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Enviroment Test 4 Passed"
-	else
-		echo "Environment Compiler Test 4 Failed"
-		exit
-	fi
-	echo " "
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-
-	echo " "
-	############## Testing Environment #####
-
-	cd "${WRF_FOLDER}"/Tests/Compatibility
-
-	cp ${NETCDF}/include/netcdf.inc .
-
-	echo " "
-	echo " "
-	echo "Library Compatibility Tests "
-	echo "Test 1"
-	$FC -c 01_fortran+c+netcdf_f.f
-	$CC -c 01_fortran+c+netcdf_c.c
-	$FC 01_fortran+c+netcdf_f.o 01_fortran+c+netcdf_c.o \
-		-L${NETCDF}/lib -lnetcdff -lnetcdf
-
-	./a.out | tee comp_test1.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" comp_test1.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Compatibility Test 1 Passed"
-	else
-		echo "Compatibility Compiler Test 1 Failed"
-		exit
-	fi
-	echo " "
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-
-	echo " "
-
-	echo "Test 2"
-	$MPIFC -c 02_fortran+c+netcdf+mpi_f.f
-	$MPICC -c 02_fortran+c+netcdf+mpi_c.c
-	$MPIFC 02_fortran+c+netcdf+mpi_f.o \
-		02_fortran+c+netcdf+mpi_c.o \
-		-L${NETCDF}/lib -lnetcdff -lnetcdf
-
-	$DIR/MPICH/bin/mpirun ./a.out | tee comp_test2.txt
-	export TEST_PASS=$(grep -w -o -c "SUCCESS" comp_test2.txt | awk '{print$1}')
-	if [ $TEST_PASS -ge 1 ]; then
-		echo "Compatibility Test 2 Passed"
-	else
-		echo "Compatibility Compiler Test 2 Failed"
-		exit
-	fi
-	echo " "
-	read -r -t 3 -p "I am going to wait for 3 seconds only ..."
-	echo " "
-
-	echo " All tests completed and passed"
-	echo " "
-
-	###############################NCEPlibs#####################################
-	#The libraries are built and installed with
-	# ./make_ncep_libs.sh -s MACHINE -c COMPILER -d NCEPLIBS_DIR -o OPENMP [-m mpi] [-a APPLICATION]
-	#It is recommended to install the NCEPlibs into their own directory, which must be created before running the installer. Further information on the command line arguments can be obtained with
-	# ./make_ncep_libs.sh -h
-
-	#If iand error occurs go to https://github.com/NCAR/NCEPlibs/pull/16/files make adjustment and re-run ./make_ncep_libs.sh
-	############################################################################
-
-	cd "${WRF_FOLDER}"/Downloads
-	git clone https://github.com/NCAR/NCEPlibs.git
-	cd NCEPlibs
-	mkdir $DIR/nceplibs
-
-	export JASPER_INC=$DIR/grib2/include
-	export PNG_INC=$DIR/grib2/include
-	export NETCDF=$DIR/NETCDF
-
-	#for loop to edit linux.gnu for nceplibs to install
-	#make if statement for gcc-9 or older
-	export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
-	export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
-	export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
-
-	export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
-	export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
-	export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
-
-	export version_10="10"
-
-	if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ]; then
-		sed -i "24s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "28s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "32s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "36s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "40s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "45s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "49s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "53s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "56s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "60s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "64s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "68s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "69s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "73s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "74s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-		sed -i "79s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
-
-	fi
-
-	if [ ${auto_config} -eq 1 ]; then
-		echo yes | ./make_ncep_libs.sh -s linux -c gnu -d $DIR/nceplibs -o 0 -m 1 -a upp
-	else
-		./make_ncep_libs.sh -s linux -c gnu -d $DIR/nceplibs -o 0 -m 1 -a upp
-	fi
-
-	export PATH=$DIR/nceplibs:$PATH
-
-	echo " "
-	
-	######################## ARWpost V3.1  ############################
-	## ARWpost
-	##Configure #3
-	###################################################################
-	cd "${WRF_FOLDER}"/Downloads
-	wget -c http://www2.mmm.ucar.edu/wrf/src/ARWpost_V3.tar.gz
-	tar -xvzf ARWpost_V3.tar.gz -C "${WRF_FOLDER}"/
-	cd "${WRF_FOLDER}"/ARWpost
-	./clean -a
-	sed -i -e 's/-lnetcdf/-lnetcdff -lnetcdf/g' "${WRF_FOLDER}"/ARWpost/src/Makefile
-	export NETCDF=$DIR/NETCDF
-
-	if [ ${auto_config} -eq 1 ]; then
-		echo 3 | ./configure #Option 3 gfortran compiler with distributed memory
-	else
-		./configure #Option 3 gfortran compiler with distributed memory
-	fi
-
-	export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
-	export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
-	export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
-
-	export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
-	export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
-	export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
-
-	export version_10="10"
-
-	if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ]; then
-		sed -i '32s/-ffree-form -O -fno-second-underscore -fconvert=big-endian -frecord-marker=4/-ffree-form -O -fno-second-underscore -fconvert=big-endian -frecord-marker=4 ${fallow_argument} /g' configure.arwp
-	fi
-
-	sed -i -e 's/-C -P -traditional/-P -traditional/g' "${WRF_FOLDER}"/ARWpost/configure.arwp
-	./compile
-
-	#IF statement to check that all files were created.
-	cd "${WRF_FOLDER}"/ARWpost
-	n=$(ls ./*.exe | wc -l)
-	if (($n == 1)); then
+mkdir $HOME/WRFCHEM
+export WRF_FOLDER=$HOME/WRFCHEM
+cd "${WRF_FOLDER}"/
+mkdir Downloads
+mkdir Libs
+export DIR="${WRF_FOLDER}"/Libs
+mkdir Libs/grib2
+mkdir Libs/NETCDF
+mkdir Libs/MPICH
+mkdir -p Tests/Environment
+mkdir -p Tests/Compatibility
+echo " "
+#############################Core Management####################################
+export CPU_CORE=$(nproc) 
+# number of available threads on system
+export CPU_6CORE="6"
+export CPU_QUARTER=$(($CPU_CORE / 4))  
+#quarter of availble cores on system
+export CPU_QUARTER_EVEN=$(($CPU_QUARTER - ($CPU_QUARTER % 2))) 
+#Forces CPU cores to even number to avoid partial core export. ie 7 cores would be 3.5 cores.
+if [ $CPU_CORE -le $CPU_6CORE ]; 
+#then 
+# If statement for low core systems
+# Forces computers to only use 1 core if there are 4 cores or less on the system
+then
+export CPU_QUARTER_EVEN="2"
+else
+export CPU_QUARTER_EVEN=$(($CPU_QUARTER - ($CPU_QUARTER % 2)))
+fi
+echo "##########################################"
+echo "Number of Threads being used $CPU_QUARTER_EVEN"
+echo "##########################################"
+echo " "
+##############################Downloading Libraries############################
+cd Downloads
+wget -c https://github.com/madler/zlib/releases/download/v$Zlib_Version/zlib-$Zlib_Version.tar.gz
+wget -c https://github.com/HDFGroup/hdf5/releases/download/hdf5_$HDF5_Version.$HDF5_Sub_Version/hdf5-$HDF5_Version-$HDF5_Sub_Version.tar.gz
+wget -c https://github.com/Unidata/netcdf-c/archive/refs/tags/v$Netcdf_C_Version.tar.gz
+wget -c https://github.com/Unidata/netcdf-fortran/archive/refs/tags/v$Netcdf_Fortran_Version.tar.gz
+wget -c https://download.sourceforge.net/libpng/libpng-$Libpng_Version.tar.gz
+wget -c https://www.ece.uvic.ca/~frodo/jasper/software/jasper-$Jasper_Version.zip
+wget -c https://github.com/pmodels/mpich/releases/download/v$Mpich_Version/mpich-$Mpich_Version.tar.gz
+wget -c https://parallel-netcdf.github.io/Release/pnetcdf-$Pnetcdf_Version.tar.gz
+wget -c https://sourceforge.net/projects/opengrads/files/grads2/2.2.1.oga.1/Linux%20%2864%20Bits%29/opengrads-2.2.1.oga.1-bundle-x86_64-pc-linux-gnu-glibc_2.17.tar.gz
+echo " "
+#############################Compilers############################
+export CC=gcc
+export CXX=g++
+export FC=gfortran
+export F77=gfortran
+export CFLAGS="-fPIC -fPIE -O3 "
+# IF statement for GNU compiler issue
+export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
+export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
+export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
+export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
+export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
+export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
+export version_10="10"
+if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ];
+then
+export fallow_argument=-fallow-argument-mismatch
+export boz_argument=-fallow-invalid-boz
+else
+export fallow_argument=
+export boz_argument=
+fi
+export FFLAGS="$fallow_argument -m64"
+export FCFLAGS="$fallow_argument -m64"
+echo "##########################################"
+echo "FFLAGS = $FFLAGS"
+echo "FCFLAGS = $FCFLAGS"
+echo "CFLAGS = $CFLAGS"
+echo "##########################################"
+echo " "
+#############################zlib############################
+# Uncalling compilers due to comfigure issue with zlib$Zlib_Version
+# With CC & CXX definied ./configure uses different compiler Flags
+cd "${WRF_FOLDER}"/Downloads
+tar -xvzf zlib-$Zlib_Version.tar.gz
+cd zlib-$Zlib_Version/
+autoreconf -i -f 2>&1 | tee autoreconf.log
+./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+echo " "
+##############################MPICH############################
+cd "${WRF_FOLDER}"/Downloads
+tar -xvzf mpich-$Mpich_Version.tar.gz
+cd mpich-$Mpich_Version/
+autoreconf -i -f 2>&1 | tee autoreconf.log
+F90= ./configure --prefix=$DIR/MPICH --with-device=ch3 FFLAGS="$fallow_argument -m64" FCFLAGS="$fallow_argument -m64" 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+export PATH=$DIR/MPICH/bin:$PATH
+export MPIFC=$DIR/MPICH/bin/mpifort
+export MPIF77=$DIR/MPICH/bin/mpifort
+export MPIF90=$DIR/MPICH/bin/mpifort
+export MPICC=$DIR/MPICH/bin/mpicc
+export MPICXX=$DIR/MPICH/bin/mpicxx
+echo " "
+#############################libpng############################
+cd "${WRF_FOLDER}"/Downloads
+export LDFLAGS=-L$DIR/grib2/lib
+export CPPFLAGS=-I$DIR/grib2/include
+tar -xvzf libpng-$Libpng_Version.tar.gz
+cd libpng-$Libpng_Version/
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+echo " "
+#############################JasPer############################
+cd "${WRF_FOLDER}"/Downloads
+unzip jasper-$Jasper_Version.zip
+cd jasper-$Jasper_Version/
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+export JASPERLIB=$DIR/grib2/lib
+export JASPERINC=$DIR/grib2/include
+echo " "
+#############################hdf5 library for netcdf4 functionality############################
+cd "${WRF_FOLDER}"/Downloads
+tar -xvzf hdf5-$HDF5_Version-$HDF5_Sub_Version.tar.gz
+cd hdf5-$HDF5_Version-$HDF5_Sub_Version
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 --with-zlib=$DIR/grib2 --enable-hl --enable-fortran --enable-parallel 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+export HDF5=$DIR/grib2
+export PHDF5=$DIR/grib2
+export LD_LIBRARY_PATH=$DIR/grib2/lib:$LD_LIBRARY_PATH
+echo " "
+#############################Install Parallel-netCDF##############################
+# Make file created with half of available cpu cores
+# Hard path for MPI added
+##################################################################################
+cd "${WRF_FOLDER}"/Downloads
+tar -xzvf pnetcdf-$Pnetcdf_Version.tar.gz
+cd pnetcdf-$Pnetcdf_Version
+export MPIFC=$DIR/MPICH/bin/mpifort
+export MPIF77=$DIR/MPICH/bin/mpifort
+export MPIF90=$DIR/MPICH/bin/mpifort
+export MPICC=$DIR/MPICH/bin/mpicc
+export MPICXX=$DIR/MPICH/bin/mpicxx
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/grib2 --enable-shared --enable-static 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+export PNETCDF=$DIR/grib2
+echo " "
+##############################Install NETCDF C Library############################
+cd "${WRF_FOLDER}"/Downloads
+tar -xzvf v$Netcdf_C_Version.tar.gz
+cd netcdf-c-$Netcdf_C_Version/
+export CPPFLAGS=-I$DIR/grib2/include
+export LDFLAGS=-L$DIR/grib2/lib
+export LIBS="-lhdf5_hl -lhdf5 -lz -lcurl -lgfortran -lgcc -lm -ldl -lpnetcdf"
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/NETCDF --disable-dap --enable-netcdf-4 --enable-netcdf4 --enable-shared --enable-static --enable-pnetcdf --enable-cdf5 --enable-parallel-tests 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+export PATH=$DIR/NETCDF/bin:$PATH
+export NETCDF=$DIR/NETCDF
+echo " "
+##############################NetCDF fortran library############################
+cd "${WRF_FOLDER}"/Downloads
+tar -xvzf v$Netcdf_Fortran_Version.tar.gz
+cd netcdf-fortran-$Netcdf_Fortran_Version/
+export LD_LIBRARY_PATH=$DIR/NETCDF/lib:$LD_LIBRARY_PATH
+export CPPFLAGS="-I$DIR/NETCDF/include -I$DIR/grib2/include"
+export LDFLAGS="-L$DIR/NETCDF/lib -L$DIR/grib2/lib"
+export LIBS="-lnetcdf -lpnetcdf -lcurl -lhdf5_hl -lhdf5 -lz -lm -ldl -lgcc -lgfortran"
+autoreconf -i -f 2>&1 | tee autoreconf.log
+CC=$MPICC FC=$MPIFC F77=$MPIF77 F90=$MPIF90 CXX=$MPICXX CFLAGS=$CFLAGS FFLAGS=$FFLAGS FCFLAGS=$FCFLAGS ./configure --prefix=$DIR/NETCDF --enable-netcdf-4 --enable-netcdf4 --enable-shared --enable-static --enable-parallel-tests --enable-hdf5 2>&1 | tee configure.log
+automake -a -f 2>&1 | tee automake.log
+make -j $CPU_QUARTER_EVEN 2>&1 | tee make.log
+make -j $CPU_QUARTER_EVEN check 2>&1 | tee make.check.log
+make -j $CPU_QUARTER_EVEN install 2>&1 | tee make.install.log
+echo " "
+#################################### System Environment Tests ##############
+cd "${WRF_FOLDER}"/Downloads
+wget -c https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compile_tutorial/tar_files/Fortran_C_NETCDF_MPI_tests.tar
+wget -c https://www2.mmm.ucar.edu/wrf/OnLineTutorial/compile_tutorial/tar_files/Fortran_C_tests.tar
+tar -xvf Fortran_C_tests.tar -C "${WRF_FOLDER}"/Tests/Environment
+tar -xvf Fortran_C_NETCDF_MPI_tests.tar -C "${WRF_FOLDER}"/Tests/Compatibility
+export one="1"
+echo " "
+############## Testing Environment #####
+cd "${WRF_FOLDER}"/Tests/Environment
+cp ${NETCDF}/include/netcdf.inc .
+echo " "
+echo " "
+echo "Environment Testing "
+echo "Test 1"
+$FC TEST_1_fortran_only_fixed.f ./a.out | tee env_test1.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test1.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Enviroment Test 1 Passed"
+else
+echo "Environment Compiler Test 1 Failed"
+# exit
+fi
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+echo "Test 2"
+$FC TEST_2_fortran_only_free.f90 ./a.out | tee env_test2.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test2.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Enviroment Test 2 Passed"
+else
+echo "Environment Compiler Test 2 Failed"
+# exit
+fi
+echo " "
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+echo "Test 3"
+$CC TEST_3_c_only.c ./a.out | tee env_test3.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test3.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Enviroment Test 3 Passed"
+else
+echo "Environment Compiler Test 3 Failed"
+# exit
+fi
+echo " "
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+echo "Test 4"
+$CC -c -m64 TEST_4_fortran+c_c.c
+$FC -c -m64 TEST_4_fortran+c_f.f90
+$FC -m64 TEST_4_fortran+c_f.o TEST_4_fortran+c_c.o ./a.out | tee env_test4.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" env_test4.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Enviroment Test 4 Passed"
+else
+echo "Environment Compiler Test 4 Failed"
+# exit
+fi
+echo " "
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+############## Testing Environment #####
+cd "${WRF_FOLDER}"/Tests/Compatibility
+cp ${NETCDF}/include/netcdf.inc .
+echo " "
+echo " "
+echo "Library Compatibility Tests "
+echo "Test 1"
+$FC -c 01_fortran+c+netcdf_f.f
+$CC -c 01_fortran+c+netcdf_c.c
+$FC 01_fortran+c+netcdf_f.o 01_fortran+c+netcdf_c.o -L${NETCDF}/lib -lnetcdff -lnetcdf ./a.out | tee comp_test1.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" comp_test1.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Compatibility Test 1 Passed"
+else
+echo "Compatibility Compiler Test 1 Failed"
+# exit
+fi
+echo " "
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+echo "Test 2"
+$MPIFC -c 02_fortran+c+netcdf+mpi_f.f
+$MPICC -c 02_fortran+c+netcdf+mpi_c.c
+$MPIFC 02_fortran+c+netcdf+mpi_f.o 02_fortran+c+netcdf+mpi_c.o -L${NETCDF}/lib -lnetcdff -lnetcdf
+$DIR/MPICH/bin/mpirun ./a.out | tee comp_test2.txt
+export TEST_PASS=$(grep -w -o -c "SUCCESS" comp_test2.txt | awk '{print$1}')
+if [ $TEST_PASS -ge 1 ];
+then
+echo "Compatibility Test 2 Passed"
+else
+echo "Compatibility Compiler Test 2 Failed"
+# exit
+fi
+echo " "
+read -r -t 3 -p "I am going to wait for 3 seconds only ..."
+echo " "
+echo " All tests completed and passed"
+echo " "
+###############################NCEPlibs#####################################
+# The libraries are built and installed with
+# ./make_ncep_libs.sh -s MACHINE -c COMPILER -d NCEPLIBS_DIR -o OPENMP [-m mpi] [-a APPLICATION]
+# It is recommended to install the NCEPlibs into their own directory, which must be created before running the installer.
+# Further information on the command line arguments can be obtained with ./make_ncep_libs.sh -h
+# If iand error occurs go to https://github.com/NCAR/NCEPlibs/pull/16/files make adjustment and re-run ./make_ncep_libs.sh
+############################################################################
+cd "${WRF_FOLDER}"/Downloads
+git clone https://github.com/NCAR/NCEPlibs.git
+cd NCEPlibs
+mkdir $DIR/nceplibs
+export JASPER_INC=$DIR/grib2/include
+export PNG_INC=$DIR/grib2/include
+export NETCDF=$DIR/NETCDF
+# for loop to edit linux.gnu for nceplibs to install
+# make if statement for gcc-9 or older
+export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
+export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
+export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
+export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
+export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
+export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
+export version_10="10"
+if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ];
+then
+sed -i "24s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "28s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "32s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "36s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "40s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "45s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "49s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "53s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "56s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "60s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "64s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "68s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "69s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "73s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "74s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+sed -i "79s/= /= $fallow_argument $boz_argument /g" "${WRF_FOLDER}/Downloads/NCEPlibs/macros.make.linux.gnu"
+fi
+if [ ${auto_config} -eq 1 ];
+then
+echo yes | ./make_ncep_libs.sh -s linux -c gnu -d $DIR/nceplibs -o 0 -m 1 -a upp
+else
+./make_ncep_libs.sh -s linux -c gnu -d $DIR/nceplibs -o 0 -m 1 -a upp
+fi
+export PATH=$DIR/nceplibs:$PATH
+echo " "
+######################## ARWpost V3.1  ############################
+## ARWpost
+# #Configure #3
+###################################################################
+cd "${WRF_FOLDER}"/Downloads
+wget -c http://www2.mmm.ucar.edu/wrf/src/ARWpost_V3.tar.gz
+tar -xvzf ARWpost_V3.tar.gz -C "${WRF_FOLDER}"/
+cd "${WRF_FOLDER}"/ARWpost
+./clean -a
+sed -i -e 's/-lnetcdf/-lnetcdff -lnetcdf/g' "${WRF_FOLDER}"/ARWpost/src/Makefile
+export NETCDF=$DIR/NETCDF
+if [ ${auto_config} -eq 1 ];
+then
+echo 3 | ./configure #Option 3 gfortran compiler with distributed memory
+else
+./configure #Option 3 gfortran compiler with distributed memory
+fi
+export GCC_VERSION=$(/usr/bin/gcc -dumpfullversion | awk '{print$1}')
+export GFORTRAN_VERSION=$(/usr/bin/gfortran -dumpfullversion | awk '{print$1}')
+export GPLUSPLUS_VERSION=$(/usr/bin/g++ -dumpfullversion | awk '{print$1}')
+export GCC_VERSION_MAJOR_VERSION=$(echo $GCC_VERSION | awk -F. '{print $1}')
+export GFORTRAN_VERSION_MAJOR_VERSION=$(echo $GFORTRAN_VERSION | awk -F. '{print $1}')
+export GPLUSPLUS_VERSION_MAJOR_VERSION=$(echo $GPLUSPLUS_VERSION | awk -F. '{print $1}')
+export version_10="10"
+if [ $GCC_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GFORTRAN_VERSION_MAJOR_VERSION -ge $version_10 ] || [ $GPLUSPLUS_VERSION_MAJOR_VERSION -ge $version_10 ];
+then
+sed -i '32s/-ffree-form -O -fno-second-underscore -fconvert=big-endian -frecord-marker=4/-ffree-form -O -fno-second-underscore -fconvert=big-endian -frecord-marker=4 ${fallow_argument} /g' configure.arwp
+fi
+sed -i -e 's/-C -P -traditional/-P -traditional/g' "${WRF_FOLDER}"/ARWpost/configure.arwp
+./compile
+# IF statement to check that all files were created.
+cd "${WRF_FOLDER}"/ARWpost
+n=$(ls ./*.exe | wc -l)
+if (($n == 1)); then
 		echo "All expected files created."
 		read -r -t 5 -p "Finished installing ARWpost. I am going to wait for 5 seconds only ..."
 	else
@@ -18560,7 +18496,6 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	git clone https://github.com/wrf-model/OBSGRID.git
 	cd "${WRF_FOLDER}"/OBSGRID
 	./clean -a
-
 	export DIR="${WRF_FOLDER}"/Libs
 	export NETCDF=$DIR/NETCDF
 	if [ ${auto_config} -eq 1 ];
@@ -18833,7 +18768,7 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	wget -c https://www2.mmm.ucar.edu/wrf/src/wps_files/geog_low_res_mandatory.tar.gz
 	tar -xvzf geog_low_res_mandatory.tar.gz -C "${WRF_FOLDER}"/GEOG/
 	mv "${WRF_FOLDER}"/GEOG/WPS_GEOG_LOW_RES/ "${WRF_FOLDER}"/GEOG/WPS_GEOG
-	if [ ${WPS_Specific_Applications} -eq 1 ];
+ 	if [ ${WPS_Specific_Applications} -eq 1 ];
 	then
 	echo " "
 	echo " WPS Geographical Input Data Mandatory for Specific Applications"
@@ -18882,54 +18817,54 @@ if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ]; then
 	fi
 # This script installs the WRFCHEM Tools with gnu or intel compilers.
 ####################################################################################################
-	if [ "$WRFCHEM_TOOLS" = "1" ]; 
-	then
-	if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
-	then
-	echo $PASSWD | sudo -S sudo apt install git
-	cd $HOME
-	cd weather-ai
-	chmod 775 *.sh
-	./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_GNU
-	cd $HOME
-	fi
-	if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
-	then
-	echo $PASSWD | sudo -S sudo apt install git
-	cd $HOME
-	cd weather-ai
-	chmod 775 *.sh
-	./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_Intel
-	cd $HOME
-	fi
-	if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
-	then
-	brew install git
-	cd $HOME
-	cd weather-ai
-	chmod 775 *.sh
-	./weather-ai-tools.sh $PASSWD $macos_64bit_GNU
-	cd $HOME
-	fi
-	if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
-	then
-	echo $PASSWD | sudo -S sudo dnf install git
-	cd $HOME
-	cd weather-ai
-	chmod 775 *.sh
-	./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
-	cd $HOME
-	fi
-	if [ "$RHL_64bit_GNU" = "2" ] && [ "$WRFCHEM_PICK" = "1" ];
-	then
-	echo $PASSWD | sudo -S sudo dnf install git
-	cd $HOME
-	cd weather-ai
-	chmod 775 *.sh
-	./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
-	cd $HOME
-	fi
-	fi
+##	if [ "$WRFCHEM_TOOLS" = "1" ]; 
+##	then
+##	if [ "$Ubuntu_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
+##	then
+##	echo $PASSWD | sudo -S sudo apt install git
+##	cd $HOME
+##	cd weather-ai
+##	chmod 775 *.sh
+##	./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_GNU
+##	cd $HOME
+##	fi
+##	if [ "$Ubuntu_64bit_Intel" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
+##	then
+##	echo $PASSWD | sudo -S sudo apt install git
+##	cd $HOME
+##	cd weather-ai
+##	chmod 775 *.sh
+##	./weather-ai-tools.sh $PASSWD $Ubuntu_64bit_Intel
+##	cd $HOME
+##	fi
+##	if [ "$macos_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
+##	then
+##	brew install git
+##	cd $HOME
+##	cd weather-ai
+##	chmod 775 *.sh
+##	./weather-ai-tools.sh $PASSWD $macos_64bit_GNU
+##	cd $HOME
+##	fi
+##	if [ "$RHL_64bit_GNU" = "1" ] && [ "$WRFCHEM_PICK" = "1" ];
+##	then
+##	echo $PASSWD | sudo -S sudo dnf install git
+##	cd $HOME
+##	cd weather-ai
+##	chmod 775 *.sh
+##	./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
+##	cd $HOME
+##	fi
+##	if [ "$RHL_64bit_GNU" = "2" ] && [ "$WRFCHEM_PICK" = "1" ];
+##	then
+##	echo $PASSWD | sudo -S sudo dnf install git
+##	cd $HOME
+##	cd weather-ai
+##	chmod 775 *.sh
+##	./weather-ai-tools.sh $PASSWD $RHL_64bit_GNU
+##	cd $HOME
+##	fi
+##	fi
 ##########################  Export PATH and LD_LIBRARY_PATH ################################
 cd $HOME
 #####################################BASH Script Finished##############################
